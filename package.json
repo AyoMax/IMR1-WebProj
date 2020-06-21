@@ -1,0 +1,16 @@
+{
+  "name": "techno-web-projet",
+  "version": "1.0.0",
+  "description": "Projet de création d'un serveur de jeux avec NodeJS et Express dans le cadre des cours de Technologie Web de la formation IMR1 2019-2020.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.3",
+    "express": "^4.17.1"
+  }
+}
