@@ -14,17 +14,19 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Redirection de la home page
-app.get('/', (req, res) => {
-    res.redirect('/auth/register');
-})
+// app.get('/', (req, res) => {
+    
+// });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Déclaration des routeurs
 const AuthRouter = require('./routers/AuthRouter');
+const HomeRouter = require('./routers/HomeRouter');
 
 app.use('/auth', AuthRouter);
+app.use('/',     HomeRouter);
 
 // Lancement du server sur le port 3000
 app.listen(3000, function () {

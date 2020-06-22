@@ -17,18 +17,39 @@
                                 <input id="password" name="password" type="password" placeholder="Password"/>
                             </div>
                             <div class="col-12">
-                                <input id="password" name="password" type="password" placeholder="Confirm password"/>
+                                <input id="passwordconfirm" name="passwordconfirm" type="password" placeholder="Confirm password"/>
                             </div>
                             <div class="col-12 d-flex justify-content-center">
                                 <input type="submit" value="Inscription" class="site-btn btn-sm"> 
                             </div>
                         </div>
                     </form>
+                    <div>
+                        <button id="gitHubRegisterBtn" class="site-btn btn-sm">Connexion with github</button>
+                    </div>
                     <div class="text-center">
                         <p>Déjà inscrit ? <a href="/auth/login">Se connecter</a></p>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            window.addEventListener('DOMContentLoaded', (evt) => {
+                let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
+                gitHubRegisterBtn.addEventListener('click', connectWithGitHub);
+            });
+
+            function connectWithGitHub() {
+                const baseUri = 'https://github.com/login/oauth/authorize'
+                const client_id = '62af1ec2d4779ce3500a';
+                const login = document.getElementById('username');
+                const redirect_uri = 'http://localhost:3000/auth/register?method=github'
+                
+                let completedUri = baseUri + '?client_id=' + client_id;
+                if (login != null) completedUri +=  '&login=' + login;
+
+                window.location.href = completedUri;
+            }
+        </script>
     </body>
 </html>
