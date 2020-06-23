@@ -49,13 +49,36 @@ class PlayMongoDBService extends PlayService {
                 },
                 { $group: 
                     { 
-                        _id: null,
-                        username: { $first: "$username" },
+                        _id: "$username",
                         maxScore: { $max: "$score" }
                     }
                 },
                 { $sort: 
                     { "maxScore": -1 }
+                },
+                {
+                    $limit: 10
+                }
+            ])
+
+        return res;
+    }
+    async getUserBestScore(slug, username){
+        let res = null;
+
+        res = await Play.aggregate(
+            [
+                { $match: 
+                    { slug: slug }
+                },
+                { $match: 
+                    { username: username }
+                },
+                { $group: 
+                    { 
+                        _id: "$username",
+                        maxScore: { $max: "$score" }
+                    }
                 }
             ])
 

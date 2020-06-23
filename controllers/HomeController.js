@@ -27,13 +27,16 @@ class HomeController {
         const playService = PlayService.getInstance();
 
         console.log('**** click-counter ****');
-        let tab = await playService.getGameRanking('click-counter');
-        console.log(tab);
+        let clickCounterRanking = await playService.getGameRanking('click-counter');
+        console.log(clickCounterRanking);
 
         console.log('**** clickermost ****');
-        tab = await playService.getGameRanking('clickermost');
-        console.log(tab);
-        res.render('home/ranking');
+        let clickermostRanking = await playService.getGameRanking('clickermost');
+        console.log(clickermostRanking);
+        res.render('home/ranking', {
+            clickCounterRanking: clickCounterRanking,
+            clickermostRanking: clickermostRanking
+        });
     }
 
 }

@@ -6,8 +6,8 @@
     <body>
         <%- include("../partials/header.ejs") %>
         <section class="container">
-            <h1>Game ranking</h1>
-            <h2>Click counter Ranking</h2>
+            <h1>Classements</h1>
+            <h2>Top 10 : Click counter</h2>
             <table class="table">
                 <thead>
                   <tr>
@@ -17,14 +17,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                  </tr>
+                <% var index = 1 %>
+                  <% for (player of clickCounterRanking) { %>
+                    <tr>
+                        <th scope="row"><%= index++ %></th>
+                        <td><%= player._id %></td>
+                        <td><%= player.maxScore %></td>
+                    </tr>
+                <% } %> 
                 </tbody>
               </table>
-              <h2>Clickermost Ranking</h2>
+              <h2>Top 10 : Clickermost</h2>
             <table class="table">
                 <thead>
                   <tr>
@@ -34,11 +37,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                  </tr>
+                    <% index = 1 %>
+                  <% for (player of clickermostRanking) { %>
+                    <tr>
+                        <th scope="row"><%= index++ %></th>
+                        <td><%= player._id %></td>
+                        <td><%= player.maxScore %></td>
+                    </tr>
+                <% } %> 
                 </tbody>
               </table>
         </section>
