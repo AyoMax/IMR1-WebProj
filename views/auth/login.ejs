@@ -8,7 +8,7 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-md-6">
                     <h1 class="text-center text-uppercase pt-4 pb-4">Connexion</h1>
-                    <form method="POST" class="comment-form">
+                    <form method="POST" class="comment-form" id="loginForm">
                         <div class="row">
                             <div class="col-12">
                                 <input id="username" name="username" type="text" placeholder="Username"/>
@@ -27,5 +27,40 @@
                 </div>
             </div>
         </div>
+        <script>
+            const form = document.getElementById('loginForm');
+            form.addEventListener('submit', login);
+
+            function login(evt) {
+                evt.preventDefault();
+
+                let username = document.getElementById('username');
+                let pwd = document.getElementById('password');
+
+                if (fetch) {
+                    fetch('/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'username': username.value,
+                            'password': pwd.value
+                        })
+                    }).then(response => {
+                        switch (response.status) {
+                            case 201:
+                                console.log('redirect');
+                                // window.location.href = '/';
+                                break;
+                            }
+                    }).catch(error => {
+                        console.error('Failed request', error);
+                    })
+                } else {
+                    // Faire quelque chose avec XMLHttpRequest?
+                }
+            }
+        </script>
     </body>
 </html>
