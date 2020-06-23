@@ -3,6 +3,8 @@
 const { post } = require("../routers/AuthRouter");
 const https = require('https');
 
+const UserService = require('../services/UserService');
+
 class AuthController {
 
     getRegister(req, res) {    
@@ -45,7 +47,19 @@ class AuthController {
     }
 
     postRegister(req, res) {
-        // TODO
+        console.log(req.body);
+
+        if (req.body) {
+            const userService = UserService.getInstance();
+            try {
+                userService.createUser(req.body.username, req.body.password);
+                res.sendStatus(201);
+            } catch (error) {
+                res.sendStatus(500);
+            }  
+        } else {
+            res.sendStatus(500);
+        }
     }
 
     getLogin(req, res) {

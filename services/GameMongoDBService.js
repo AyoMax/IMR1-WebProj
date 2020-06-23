@@ -1,8 +1,9 @@
 "use strict"
 
 const Game = require('../models/GameSchema');
+const GameService = require('../services/GameService');
 
-class GameMongoDBService {
+class GameMongoDBService extends GameService {
 
     createGame(name, description, slug) {
         const user = new Game({

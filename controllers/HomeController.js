@@ -4,7 +4,7 @@ const { post } = require("../routers/AuthRouter");
 const https = require('https');
 
 const Game = require('../models/GameSchema');
-const GameService = require('../services/GameMongoDBService');
+const GameService = require('../services/GameService');
 
 class HomeController {
 
@@ -13,7 +13,7 @@ class HomeController {
     }
 
     getGames(req, res) {
-        const gameService = new GameService();
+        const gameService = GameService.getInstance();
         
         gameService.getGames().then(result => {
             console.log(result);

@@ -1,8 +1,9 @@
 "use strict"
 
 const Play = require('../models/PlaySchema');
+const PlayService = require('./PlayService');
 
-class PlayMongoDBService {
+class PlayMongoDBService extends PlayService {
 
     createPlay(userId, gameId, score, date) {
         const play = new Play({
@@ -27,13 +28,13 @@ class PlayMongoDBService {
         return res;
     }
 
-    getPlays() {
-        res = null;
+    async getPlays() {
+        let res = [];
 
-        Play.find({})
-            .then(plays => res = plays)
-            .catch(error => console.log( error ));
-
+        for await (const play of Play.find()) {
+            res.push(play);
+        }
+        
         return res;
     }
 
