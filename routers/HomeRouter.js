@@ -9,4 +9,5 @@ router.get ('',         homeController.getIndex);
 router.get ('/games',   homeController.getGames);
 router.get ('/ranking', homeController.getRanking);
 
+
 module.exports = router;

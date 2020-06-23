@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <%- include("../partials/head.ejs") %>
+    </head>
+    <body class="click-counter">
+        <%- include("../partials/header.ejs") %>
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="game-container col-md-5 mt-4">
+                <div class="timer text-center">
+                    <span class="min">00</span>:<span class="sec">00</span>   
+                </div>
+                <figure class="cookie"> 
+                    <img draggable="false" src="https://previews.123rf.com/images/rusnickel/rusnickel1703/rusnickel170300025/74901326-un-biscuit-aux-p%C3%A9pites-de-chocolat-choco-cookie-icon-illustration-vectorielle.jpg" alt="">
+                </figure>
+                <div class="nbClick text-center">
+                    Vous avez fait <span>0 clique.</span> 
+                </div>
+                <div class="popup popup-begin show">
+                    <div class="btn-container text-center">
+                        <button class="begin">Commencer ?</button>
+                    </div>
+                </div>
+                <div class="popup popup-end">
+                    <p>Votre Score est de : <span></span> clique.s en 60 secondes !</p>
+                    <div class="btn-container text-center">
+                        <a href="/ranking">Voir classement</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include("../partials/sharedJS.ejs") %>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('.cookie img').ondragstart = function() { return false; };
+            let cookieTag = document.querySelector(".cookie");
+            let timerMinTag = document.querySelector(".timer .min");
+            let timerSecTag = document.querySelector(".timer .sec");
+            let minCalc = 0;
+            let secCalc = 0;
+            let scoreTag = document.querySelector(".nbClick span");
+            let beginButton = document.querySelector(".popup-begin button");
+            let finalScoreTag = document.querySelector(".popup-end span");
+    
+            let intervalId = null;
+            let counterInit = 15;
+            let counter = counterInit;
+            refreshCounterTag(counter)
+            let score = 0;
+            
+            beginButton.addEventListener("click", () => {
+                document.querySelector(".popup-begin").className = "popup popup-begin";
+                intervalId = setInterval(() => {
+                    if(counter == 0){
+                        clearInterval(intervalId);
+                        document.querySelector(".popup-end").className = "popup popup-end show";
+                        finalScoreTag.innerHTML = score;
+                    }else{
+                        counter--;
+                        refreshCounterTag(counter);
+                    }
+                }, 1000);
+            });
+    
+            cookieTag.addEventListener("click", () => {
+                if(counter > 0 && counter != counterInit ){
+                    score++;
+                    scoreTag.innerHTML = score+" cliques.";
+
+                }
+            });
+
+            function refreshCounterTag(counter){
+                minCalc = parseInt(counter/60);
+                secCalc = counter % 60;
+                if(minCalc < 10){
+                    minCalc = "0"+minCalc;
+                }
+                if(secCalc < 10){
+                    secCalc = "0"+secCalc;
+                }
+                timerMinTag.innerHTML = minCalc;
+                timerSecTag.innerHTML = secCalc;
+            };
+        });
+
+        
+    </script>
+</body>
+</html>
