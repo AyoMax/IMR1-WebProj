@@ -4,24 +4,24 @@ const Play = require('../models/PlaySchema');
 const PlayService = require('./PlayService');
 
 class PlayMongoDBService extends PlayService {
-
-    createPlay(userId, gameId, score, date) {
+    
+    createPlay(username, slug, score, date) {
         const play = new Play({
-            userId: userId, 
-            gameId: gameId, 
+            username: username, 
+            slug: slug, 
             score: score,
             date: date
         });
         
-        user.save()
+        play.save()
             .then(() => console.log('Partie enregistré'))
             .catch(error => console.log('Erreur lors de l\'enregistrement de la partie'));
     }
 
-    getPlay(id) {
-        res = null;
+    async getPlay(id) {
+        let res = null;
 
-        Play.findOne({ _id: id})
+        await Play.findOne({ _id: id})
                     .then(play => res = play)
                     .catch(error => console.log( error ));
 
@@ -38,11 +38,11 @@ class PlayMongoDBService extends PlayService {
         return res;
     }
 
-    updatePlay(id, userId, gameId, score, date) {
+    updatePlay(id, username, slug, score, date) {
         Play.updateOne({ _id: id }, { 
             _id: id, 
-            userId: userId, 
-            gameId: gameId, 
+            username: username, 
+            slug: slug, 
             score: score,
             date: date
         })

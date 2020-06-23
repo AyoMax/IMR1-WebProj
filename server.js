@@ -49,13 +49,20 @@ app.get('/', (req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: false })); // permet de récupérer le body d'une requête post
+app.use(bodyParser.json());
 
 // Déclaration des routeurs
 const AuthRouter = require('./routers/AuthRouter');
 const HomeRouter = require('./routers/HomeRouter');
+const GameRouter = require('./routers/GameRouter');
 
 app.use('/auth', AuthRouter);
 app.use('/',     HomeRouter);
+app.use('/game', GameRouter);
+app.get ('*', (req, res) => {
+    res.render('404');
+});
 
 // Lancement du server sur le port 3000
 app.listen(3000, function () {
