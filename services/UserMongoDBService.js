@@ -34,23 +34,17 @@ class UserMongoDBService extends UserService {
             });
     }
 
-    getUser(id) {
-        res = null;
-
-        User.findOne({ _id: id})
-            .then(user => res = user)
-            .catch(error => console.log( error ));
-
-        return res;
+    async getUserByUsername(name) {
+        return User.findOne({name: name});
     }
 
-    getUsers() {
-        res = null;
+    async getUsers() {
+        let res = [];
 
-        User.find({})
-            .then(users => res = users)
-            .catch(error => console.log( error ));
-
+        for await (const user of User.find()) {
+            res.push(user);
+        }
+        
         return res;
     }
 
