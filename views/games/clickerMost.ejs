@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <%- include("../partials/head.ejs") %>
+    </head>
+    <body class="game">
+        <%- include("../partials/header.ejs") %>
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="game-container col-md-5 mt-4">
+                <figure class="cookie"> 
+                    <img draggable="false" src="https://previews.123rf.com/images/rusnickel/rusnickel1703/rusnickel170300025/74901326-un-biscuit-aux-p%C3%A9pites-de-chocolat-choco-cookie-icon-illustration-vectorielle.jpg" alt="">
+                </figure>
+                <div class="nbClick text-center">
+                    Vous avez fait <span>0 clique.</span> 
+                </div>
+                <div class="popup popup-begin show">
+                    <div class="btn-container text-center">
+                        <button class="begin">Commencer ?</button>
+                    </div>
+                </div>
+                <div class="popup popup-end">
+                    <p>Votre Score est de : <span></span></p>
+                    <div class="btn-container text-center">
+                        <a href="/ranking">Voir classement</a>
+                    </div>
+                </div>
+                <button class="endbutton">Terminer ?</button>
+            </div>
+        </div>
+    </div>
+    <%- include("../partials/sharedJS.ejs") %>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('.cookie img').ondragstart = function() { return false; };
+            let cookieTag = document.querySelector(".cookie");
+            let scoreTag = document.querySelector(".nbClick span");
+            let beginButton = document.querySelector(".popup-begin button");
+            let endButton = document.querySelector(".endbutton");
+            let finalScoreTag = document.querySelector(".popup-end span");
+            let start = false;
+            let score = 0;
+            
+            beginButton.addEventListener("click", () => {
+                document.querySelector(".popup-begin").className = "popup popup-begin"; 
+                start = true;
+                endButton.className = "endbutton show";
+            });
+            endButton.addEventListener("click", () => {
+                endButton.className = "endbutton";
+                if(start = true){
+                    document.querySelector(".popup-end").className = "popup popup-end show";
+                    finalScoreTag.innerHTML = score;
+                    if (fetch) {
+                        fetch('/game/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                'username': "identifiantEnCarton",
+                                'slug': 'clickermost',
+                                'score': score,
+                                'date': new Date()
+                            })
+                        }).then(response => {
+                            switch (response.status) {
+                                case 201:
+                                    console.log('Score enregistré');
+                                    break;
+                                case 500:
+                                    console.log('Dommage');
+                                    var tag = document.createElement("p");
+                                    tag.className = "error";
+                                    var text = document.createTextNode("Un problème est survenue avec la sauvegarde de votre score...");
+                                    tag.appendChild(text);
+                                    var element = document.querySelector(".popup-end");
+                                    element.appendChild(tag);
+                                    break;
+                            }
+                        }).catch(error => {
+                            console.error('Failed request', error);
+                        })
+                    } else {
+                        // Faire quelque chose avec XMLHttpRequest?
+                    } 
+                }
+                  
+            });
+    
+            cookieTag.addEventListener("click", () => {
+                if(start){
+                    score++;
+                    scoreTag.innerHTML = score+" cliques.";
+                }
+            });
+
+        });
+
+        
+    </script>
+</body>
+</html>

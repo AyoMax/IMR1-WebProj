@@ -1516,17 +1516,23 @@ ol {
 /*****************/
 /***   GAMES   ***/
 /*****************/
-.click-counter .timer{
+.game .timer{
 	font-size: 26px;
 	font-weight: 700;
 }
-.click-counter .cookie{
+.game .cookie{
     width: 100%;
     object-fit: contain;
     object-position: center;
     cursor: pointer;
 }
-.click-counter .cookie img{
+.game .endbutton{
+	display: none;
+}
+.game .endbutton.show{
+	display: block;
+}
+.game .cookie img{
     width: 100%;
     height: 100%;
     user-drag: none; 
@@ -1536,10 +1542,10 @@ ol {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
-.click-counter .game-container{
+.game .game-container{
 	position: relative;
 }
-.click-counter .popup{
+.game .popup{
 	display: none;
 	position: absolute;
 	top: 50%;
@@ -1550,17 +1556,22 @@ ol {
 	background-color: #ffb320;
 	border-radius: 10px;
 }
-.click-counter .popup p{
+.game .popup p{
 	color: black;
 	font-size: 26px;
 }
-.click-counter .popup span{
+.game .popup span{
 	font-weight: 700;	
 }
-.click-counter .popup .user-panel{
+.game .popup .user-panel{
 	float: none;
 }
-.click-counter .popup .btn-container a, .click-counter .popup .btn-container a:hover, .click-counter .popup .btn-container button, .click-counter .popup .btn-container button:hover{
+.game button.endbutton{
+	background-color: #ffb320;
+	margin: auto;
+	color: black;
+}
+.game .endbutton, .game .popup .btn-container a, .game .popup .btn-container a:hover, .game .popup .btn-container button, .game .popup .btn-container button:hover{
 	background-color: black;
 	color: white;
 	padding: 12px;
@@ -1568,11 +1579,15 @@ ol {
 	border: none;
 	cursor: pointer;
 }
-.click-counter .popup.show{
+.game .popup.show{
 	display: block;
 }
 
-
+p.error{
+	color: red !important;
+    font-size: 15px !important;
+    margin-top: 15px;
+}
 /******************/
 /** 404 template **/
 /******************/

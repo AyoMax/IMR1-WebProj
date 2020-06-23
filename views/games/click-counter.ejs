@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="popup popup-end">
-                    <p>Votre Score est de : <span></span> clique.s en 60 secondes !</p>
+                    <p>Votre Score est de : <span></span> clique.s en 15 secondes !</p>
                     <div class="btn-container text-center">
                         <a href="/ranking">Voir classement</a>
                     </div>
@@ -58,6 +58,39 @@
                         clearInterval(intervalId);
                         document.querySelector(".popup-end").className = "popup popup-end show";
                         finalScoreTag.innerHTML = score;
+                        if (fetch) {
+                            fetch('/game/register', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    'username': "identifiantEnCarton",
+                                    'slug': 'click-counter',
+                                    'score': score,
+                                    'date': new Date()
+                                })
+                            }).then(response => {
+                                switch (response.status) {
+                                    case 201:
+                                        console.log('Score enregistré');
+                                        break;
+                                    case 500:
+                                        console.log('Dommage');
+                                        var tag = document.createElement("p");
+                                        tag.className = "error";
+                                        var text = document.createTextNode("Un problème est survenue avec la sauvegarde de votre score...");
+                                        tag.appendChild(text);
+                                        var element = document.querySelector(".popup-end");
+                                        element.appendChild(tag);
+                                        break;
+                                }
+                            }).catch(error => {
+                                console.error('Failed request', error);
+                            })
+                        } else {
+                            // Faire quelque chose avec XMLHttpRequest?
+                        }
                     }else{
                         counter--;
                         refreshCounterTag(counter);
@@ -69,7 +102,6 @@
                 if(counter > 0 && counter != counterInit ){
                     score++;
                     scoreTag.innerHTML = score+" cliques.";
-
                 }
             });
 
