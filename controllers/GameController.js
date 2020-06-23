@@ -30,7 +30,7 @@ class GameController {
         if (req.body) {
             const playService = PlayService.getInstance();
             try {
-                playService.createPlay(req.body.username, req.body.slug, req.body.score, req.body.date);
+                playService.createPlay(req.body.username, req.body.slug, req.body.score);
                 res.sendStatus(201);
             } catch (error) {
                 res.sendStatus(500);

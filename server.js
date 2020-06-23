@@ -28,24 +28,24 @@ app.set('view engine', 'ejs');
 
 // Redirection de la home page
 app.get('/', (req, res, next) => {
-    const cookies     = req.cookies;
-    const originalURL = req.originalUrl;
-    console.log(cookies);
-    console.log(cookies.isconnect);
+    // const cookies     = req.cookies;
+    // const originalURL = req.originalUrl;
+    // console.log(cookies);
+    // console.log(cookies.isconnect);
 
-    if (originalURL == '/auth/login' || originalURL == '/auth/register') { 
-        next();
-    } else {
-        if (cookies.username) {
-            if (cookies.isconnect == 'true') {
-                next();
-            } else {
-                res.redirect('/auth/login');
-            }
-        } else {
-            res.redirect('/auth/register');
-        }
-    }
+    // if (originalURL == '/auth/login' || originalURL == '/auth/register') { 
+    //     next();
+    // } else {
+    //     if (cookies.username) {
+    //         if (cookies.isconnect == 'true') {
+    //             next();
+    //         } else {
+    //             res.redirect('/auth/login');
+    //         }
+    //     } else {
+    //         res.redirect('/auth/register');
+    //     }
+    // }
 });
 
 app.use(express.static(path.join(__dirname, 'public')));

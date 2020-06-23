@@ -10,7 +10,7 @@ class PlayMongoDBService extends PlayService {
             username: username, 
             slug: slug, 
             score: score,
-            date: date
+            date: new Date()
         });
         
         play.save()
@@ -35,6 +35,30 @@ class PlayMongoDBService extends PlayService {
             res.push(play);
         }
         
+        return res;
+    }
+
+    async getGameRanking(slug){
+        let res = null;
+
+
+        res = await Play.aggregate(
+            [
+                { $match: 
+                    { slug: slug } 
+                },
+                { $group: 
+                    { 
+                        _id: null,
+                        username: { $first: "$username" },
+                        maxScore: { $max: "$score" }
+                    }
+                },
+                { $sort: 
+                    { "maxScore": -1 }
+                }
+            ])
+
         return res;
     }
 

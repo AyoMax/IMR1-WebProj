@@ -6,6 +6,9 @@ const https = require('https');
 const Game = require('../models/GameSchema');
 const GameService = require('../services/GameService');
 
+const Play = require('../models/PlaySchema');
+const PlayService = require('../services/PlayMongoDBService');
+
 class HomeController {
 
     getIndex(req, res) {
@@ -20,7 +23,16 @@ class HomeController {
         });        
     }
 
-    getRanking(req, res) {
+    async getRanking(req, res) {
+        const playService = PlayService.getInstance();
+
+        console.log('**** click-counter ****');
+        let tab = await playService.getGameRanking('click-counter');
+        console.log(tab);
+
+        console.log('**** clickermost ****');
+        tab = await playService.getGameRanking('clickermost');
+        console.log(tab);
         res.render('home/ranking');
     }
 

@@ -4,7 +4,7 @@
     <head>
         <%- include("../partials/head.ejs") %>
     </head>
-    <body class="click-counter">
+    <body class="game">
         <%- include("../partials/header.ejs") %>
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -67,8 +67,7 @@
                                 body: JSON.stringify({
                                     'username': "identifiantEnCarton",
                                     'slug': 'click-counter',
-                                    'score': score,
-                                    'date': new Date()
+                                    'score': score
                                 })
                             }).then(response => {
                                 switch (response.status) {
