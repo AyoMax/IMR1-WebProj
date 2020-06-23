@@ -1,19 +1,37 @@
 "use strict"
 
 const User = require('../models/UserSchema');
+const UserService = require('../services/UserService');
 
-class UserMongoDBService {
+class UserMongoDBService extends UserService {
 
-    createUser(surname, password, gitHubToken) {
+    createUser(username, password) {
         const user = new User({
-            surname: surname, 
+            username: username, 
+            password: password
+        });
+
+        user.save()
+            .then(() => console.log('Utilisateur enregistré'))
+            .catch(error => {
+                console.log('Erreur lors de l\'enregistrement de l\'utilisateur');
+                throw error;
+            });
+    }
+
+    createUser(username, password, gitHubToken) {
+        const user = new User({
+            username: username, 
             password: password, 
             gitHubToken: gitHubToken
         });
 
         user.save()
             .then(() => console.log('Utilisateur enregistré'))
-            .catch(error => console.log('Erreur lors de l\'enregistrement de l\'utilisateur'));
+            .catch(error => {
+                console.log('Erreur lors de l\'enregistrement de l\'utilisateur');
+                throw error;
+            });
     }
 
     getUser(id) {

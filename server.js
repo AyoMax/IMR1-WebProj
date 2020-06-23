@@ -1,5 +1,11 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
+
+const dotenv = require('dotenv');
+
+// Récupération des variables d'environnement dans le fichier .env
+dotenv.config();
 
 // Connexion à la BDD mongodb
 const mongoose = require('mongoose');
@@ -8,7 +14,12 @@ mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true }
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+// Défiinition de l'app
 const app = express();
+
+//app.use(bodyParser.urlencoded({ extended: false })); // permet de récupérer le body d'une requête post
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));

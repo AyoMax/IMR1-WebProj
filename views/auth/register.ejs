@@ -8,16 +8,16 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-md-6">
                     <h1 class="text-center text-uppercase pt-4 pb-4">Inscription</h1>
-                    <form method="POST" class="comment-form">
+                    <form method="POST" action="/auth/register" class="comment-form" id="registerForm" name="registerForm">
                         <div class="row">
                             <div class="col-12">
-                                <input id="username" name="username" type="text" placeholder="Username"/>
+                                <input id="username" name="username" type="text" placeholder="Username" required/>
                             </div>
                             <div class="col-12">
-                                <input id="password" name="password" type="password" placeholder="Password"/>
+                                <input id="password" name="password" type="password" placeholder="Password" required/>
                             </div>
                             <div class="col-12">
-                                <input id="passwordconfirm" name="passwordconfirm" type="password" placeholder="Confirm password"/>
+                                <input id="passwordconfirm" name="passwordconfirm" type="password" placeholder="Confirm password" required/>
                             </div>
                             <div class="col-12 d-flex justify-content-center">
                                 <input type="submit" value="Inscription" class="site-btn btn-sm"> 
@@ -34,12 +34,54 @@
             </div>
         </div>
         <script>
-            window.addEventListener('DOMContentLoaded', (evt) => {
-                let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
-                gitHubRegisterBtn.addEventListener('click', connectWithGitHub);
-            });
+            const form = document.getElementById('registerForm');
+            form.addEventListener('submit', register);
 
-            function connectWithGitHub() {
+            let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
+            gitHubRegisterBtn.addEventListener('click', registerWithGitHub);
+
+            function register(evt) {
+                evt.preventDefault();
+
+                let username = document.getElementById('username');
+                let newPwd = document.getElementById('password');
+                let confirmPwd = document.getElementById('passwordconfirm');
+
+                if (newPwd.value == confirmPwd.value) {
+                    confirmPwd.setCustomValidity('');
+                    if (fetch) {
+                        fetch('/auth/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                'username': username.value,
+                                'password': newPwd.value
+                            })
+                        }).then(response => {
+                            switch (response.status) {
+                                case 201:
+                                    console.log('redirect');
+                                    // window.location.href = '/';
+                                    break;
+                                case 500:
+                                    username.setCustomValidity('Ce nom d\'utilisateur n\'est pas disponible');
+                                    break;
+                            }
+                        }).catch(error => {
+                            console.error('Failed request', error);
+                        })
+                    } else {
+                        // Faire quelque chose avec XMLHttpRequest?
+                    }
+                } else {
+                    confirmPwd.setCustomValidity('Le mot de passe doit correspondre');
+                    confirmPwd.checkValidity();
+                }
+            }
+
+            function registerWithGitHub() {
                 const baseUri = 'https://github.com/login/oauth/authorize'
                 const client_id = '62af1ec2d4779ce3500a';
                 const login = document.getElementById('username');
