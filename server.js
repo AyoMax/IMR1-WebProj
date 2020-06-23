@@ -1,6 +1,7 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
+const express      = require('express');
+const path         = require('path');
+const bodyParser   = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const dotenv = require('dotenv');
 
@@ -17,18 +18,35 @@ mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true }
 // Défiinition de l'app
 const app = express();
 
-//app.use(bodyParser.urlencoded({ extended: false })); // permet de récupérer le body d'une requête post
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Redirection de la home page
-// app.get('/', (req, res) => {
-    
-// });
+app.get('/', (req, res, next) => {
+    const cookies     = req.cookies;
+    const originalURL = req.originalUrl;
+    console.log(cookies);
+    console.log(cookies.isconnect);
+
+    if (originalURL == '/auth/login' || originalURL == '/auth/register') { 
+        next();
+    } else {
+        if (cookies.username) {
+            if (cookies.isconnect == 'true') {
+                next();
+            } else {
+                res.redirect('/auth/login');
+            }
+        } else {
+            res.redirect('/auth/register');
+        }
+    }
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 

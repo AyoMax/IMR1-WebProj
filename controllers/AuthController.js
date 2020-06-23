@@ -69,14 +69,12 @@ class AuthController {
     postLogin(req, res) {
         const userService = UserService.getInstance();
 
-        console.log(req.body);
-
         if (req.body) {
             userService.getUserByUsername(req.body.username).then(result => {
-                console.log(result);
-
                 if (result && result.username == req.body.username && result.password == req.body.password) {
                     res.sendStatus(201);
+                } else {
+                    res.sendStatus(400);
                 }
             });
         }

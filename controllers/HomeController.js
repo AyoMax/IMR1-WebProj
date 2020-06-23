@@ -16,8 +16,6 @@ class HomeController {
         const gameService = GameService.getInstance();
         
         gameService.getGames().then(result => {
-            console.log(result);
-
             res.render('home/games', { games: result });
         });        
     }
