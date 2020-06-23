@@ -26,28 +26,6 @@ app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Redirection de la home page
-app.get('/', (req, res, next) => {
-    const cookies     = req.cookies;
-    const originalURL = req.originalUrl;
-    console.log(cookies);
-    console.log(cookies.isconnect);
-
-    if (originalURL == '/auth/login' || originalURL == '/auth/register') { 
-        next();
-    } else {
-        if (cookies.username) {
-            if (cookies.isconnect == 'true') {
-                next();
-            } else {
-                res.redirect('/auth/login');
-            }
-        } else {
-            res.redirect('/auth/register');
-        }
-    }
-});
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false })); // permet de récupérer le body d'une requête post
 app.use(bodyParser.json());
@@ -58,6 +36,24 @@ const HomeRouter = require('./routers/HomeRouter');
 const GameRouter = require('./routers/GameRouter');
 
 app.use('/auth', AuthRouter);
+
+// Guard - "Vous ne passerez pas !" ... si vous n'êtes pas connectés
+app.get('*', (req, res, next) => {
+    const cookies = req.cookies;
+    const originalURL = req.originalUrl;
+    console.log(cookies);
+
+    if (cookies.username) {
+        if (cookies.isconnect == 'true') {
+            next();
+        } else {
+            res.redirect('/auth/login');
+        }
+    } else {
+        res.redirect('/auth/register');
+    }
+});
+
 app.use('/',     HomeRouter);
 app.use('/game', GameRouter);
 app.get ('*', (req, res) => {

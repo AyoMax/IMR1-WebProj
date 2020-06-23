@@ -11,19 +11,15 @@ class UserService {
         }
     }
 
-    createUser(username, password) {
+    async createUser(username, password) {
         throw new Error('Method createUser not implemented.');
     }
 
-    createUser(surname, password, gitHubToken) {
-        throw new Error('Method createUser not implemented.');
-    }
-
-    getUserByUsername(name) {
+    async getUserByUsername(name) {
         throw new Error('Method getUserByName not implemented.');
     }
 
-    getUsers() {
+    async getUsers() {
         throw new Error('Method getUsers not implemented.');
     }
 
