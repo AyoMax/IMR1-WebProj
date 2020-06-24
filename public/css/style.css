@@ -1649,3 +1649,16 @@ color: black;
 .not-found a:hover {
 text-decoration: underline;
 }
+
+/******************/
+/**   Ranking    **/
+/******************/
+section.ranking{
+	margin: 20px auto;
+}
+section.ranking h1{
+	margin-bottom: 15px;
+}
+section.ranking h2{
+	margin-bottom: 10px;
+}
