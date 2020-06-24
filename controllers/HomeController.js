@@ -34,16 +34,17 @@ class HomeController {
             }
             let gameRanking = await playService.getGameRanking(game.slug);
             console.log(gameRanking);
-            let rank = null;
+            let rank = false;
             // tri du tableau pour gérer les égalités
             for(var i = 1; i < gameRanking.length ; i++){
                 console.log(i);
                 if(gameRanking[i - 1].maxScore != gameRanking[i].maxScore){
-                    if(gameRanking[i - 1]._id == req.cookies.username || gameRanking[i]._id == req.cookies.username){
+                    if((gameRanking[i - 1]._id == req.cookies.username || gameRanking[i]._id == req.cookies.username) && !rank){
                         rank = i;
                     }
                 }
             }
+            console.log("rang :"+rank)
 
 
             tabGameInfo.push({
