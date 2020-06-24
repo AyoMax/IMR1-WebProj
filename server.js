@@ -8,12 +8,24 @@ const dotenv = require('dotenv');
 // Récupération des variables d'environnement dans le fichier .env
 dotenv.config();
 
-// Connexion à la BDD mongodb
-const mongoose = require('mongoose');
-const mongodbUri = "mongodb+srv://ayomax:5mMwlLPIyZf3k68i@imr1webproj-ac8e2.mongodb.net/imr1webproj";
-mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));
+switch (process.env.DBPROVIDER) {
+    case 'MongoDB':
+        // Connexion à la BDD mongodb
+        const mongoose = require('mongoose');
+        const mongodbUri = "mongodb+srv://ayomax:5mMwlLPIyZf3k68i@imr1webproj-ac8e2.mongodb.net/imr1webproj";
+        mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true })
+            .then(() => console.log('Connexion à MongoDB réussie !'))
+            .catch(() => console.log('Connexion à MongoDB échouée !'));
+        break;
+    case 'LowDB':
+        // Connexion à la BDD lowdb
+        const low = require('lowdb');
+        const FileSync = require('lowdb/adapters/FileSync')
+        
+        const adapter = new FileSync('lowdb.json')
+        const db = low(adapter)
+        break;
+}
 
 // Défiinition de l'app
 const app = express();

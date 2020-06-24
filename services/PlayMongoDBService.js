@@ -48,7 +48,7 @@ class PlayMongoDBService extends PlayService {
         return res;
     }
 
-    async getGameRanking(slug){
+    async getGameRanking(slug) {
         let res = null;
 
         res = await Play.aggregate(
@@ -72,8 +72,8 @@ class PlayMongoDBService extends PlayService {
 
         return res;
     }
-    
-    async getUserBestScore(slug, username){
+
+    async getUserBestScore(slug, username) {
         let res = null;
 
         res = await Play.aggregate(

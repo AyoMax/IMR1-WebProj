@@ -1,19 +1,9 @@
 "use strict"
 
-class UserService {
+const low = require('lowdb');
+const UserService = require('../services/UserService');
 
-    static getInstance() {
-        switch (process.env.DBPROVIDER) {
-            case 'MongoDB':
-                const UserMongoDBService = require("./UserMongoDBService");
-                return new UserMongoDBService();
-                break;
-            case 'LowDB':
-                const UserLowDBService = require("./UserLowDBService");
-                return new UserLowDBService();
-                break;
-        }
-    }
+class UserLowDBService extends UserService {
 
     async createUser(username, password) {
         throw new Error('Method createUser not implemented.');
@@ -37,4 +27,4 @@ class UserService {
 
 }
 
-module.exports = UserService;
+module.exports = UserLowDBService;
