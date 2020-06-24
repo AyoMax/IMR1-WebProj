@@ -34,6 +34,17 @@
             </div>
         </div>
         <script>
+
+            var userErrtag = document.createElement("div");
+            userErrtag.className = "col-12 error";
+            var text = document.createTextNode("Nom d'utilisateur déjà existant");
+            userErrtag.appendChild(text);
+
+            var pwdErrtag = document.createElement("div");
+            pwdErrtag.className = "col-12 error";
+            var text = document.createTextNode("Vérification de mot de passe erronée.");
+            pwdErrtag.appendChild(text);
+
             const form = document.getElementById('registerForm');
             form.addEventListener('submit', register);
 
@@ -42,13 +53,15 @@
 
             function register(evt) {
                 evt.preventDefault();
+                userErrtag.className = "col-12 error";
+                pwdErrtag.className = "col-12 error";
 
                 let username = document.getElementById('username');
                 let newPwd = document.getElementById('password');
                 let confirmPwd = document.getElementById('passwordconfirm');
 
                 if (newPwd.value == confirmPwd.value) {
-                    confirmPwd.setCustomValidity('');
+                    pwdErrtag.className = "";
                     if (fetch) {
                         fetch('/auth/register', {
                             method: 'POST',
@@ -75,13 +88,9 @@
                                     break;
                                 case 400:
                                     console.log('Username déjà existant');
-                                    var tag = document.createElement("div");
-                                    tag.className = "error";
-                                    tag.classList = "col-12";
-                                    var text = document.createTextNode("Nom d'utilisateur ou mot de passe invalide");
-                                    tag.appendChild(text);
-                                    var element = document.getElementById("submit");
-                                    element.parentElement.before(tag);
+                                    var element = document.getElementById("password");
+                                    element.parentElement.before(userErrtag);
+                                    userErrtag.className = "col-12 error show";
                                     break;
                             }
                         }).catch(error => {
@@ -91,7 +100,10 @@
                         // Faire quelque chose avec XMLHttpRequest?
                     }
                 } else {
-                    confirmPwd.setCustomValidity('Le mot de passe doit correspondre');
+                    //confirmPwd.setCustomValidity('Le mot de passe doit correspondre');
+                    var element = document.getElementById("submit");
+                    element.parentElement.before(pwdErrtag);
+                    pwdErrtag.className = "col-12 error show";
                 }
             }
 

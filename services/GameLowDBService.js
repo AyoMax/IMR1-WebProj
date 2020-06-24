@@ -8,7 +8,6 @@ class GameLowDBService extends GameService {
 
     constructor() {
         super();
-
         const adapter = new FileSync('db.json')
         this.db = low(adapter);
     }
@@ -29,7 +28,7 @@ class GameLowDBService extends GameService {
 
         // return res;
 
-        // throw new Error('Method getGames not implemented.');
+         throw new Error('Method getGames not implemented.');
     }
 
     updateGame(id, name, description, slug) {
