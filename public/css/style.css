@@ -1662,3 +1662,13 @@ section.ranking h1{
 section.ranking h2{
 	margin-bottom: 10px;
 }
+
+.error.show{
+	display: block;
+}
+.error{
+	display: none;
+	text-align: center;
+	color: red !important;
+	margin-bottom: 24px;
+}

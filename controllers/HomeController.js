@@ -32,16 +32,20 @@ class HomeController {
             if(maxPlayerScore.length > 0){
                 bestScore = maxPlayerScore[0].maxScore;
             }
-            let rank = null;
             let gameRanking = await playService.getGameRanking(game.slug);
-            let index = 0;
             console.log(gameRanking);
-            for (let play of gameRanking){
-                index++;
-                if(req.cookies.username == play._id){
-                    rank = index;
+            let rank = null;
+            // tri du tableau pour gérer les égalités
+            for(var i = 1; i < gameRanking.length ; i++){
+                console.log(i);
+                if(gameRanking[i - 1].maxScore != gameRanking[i].maxScore){
+                    if(gameRanking[i - 1]._id == req.cookies.username || gameRanking[i]._id == req.cookies.username){
+                        rank = i;
+                    }
                 }
             }
+
+
             tabGameInfo.push({
                 name: game.name,
                 description: game.description,
@@ -57,18 +61,55 @@ class HomeController {
     async getRanking(req, res) {
         const playService = PlayService.getInstance();
 
-        console.log('**** click-counter ****');
+        console.log('**** click-counter rety ****');
         let clickCounterRanking = await playService.getGameRanking('click-counter');
         console.log(clickCounterRanking);
+        console.log(clickCounterRanking.length);
+
+        let rank = 1;
+        let clickCounterRankTab = [];
+        for(var i = 1; i < clickCounterRanking.length ; i++){
+            console.log(i);
+            if(clickCounterRanking[i - 1].maxScore != clickCounterRanking[i].maxScore){
+                rank = i;
+            }
+            clickCounterRankTab.push({
+                _id: clickCounterRanking[i]._id,
+                maxScore: clickCounterRanking[i].maxScore,
+                rank: rank
+            });
+        }
+        console.log(clickCounterRankTab);
+
+
 
         console.log('**** clickermost ****');
         let clickermostRanking = await playService.getGameRanking('clickermost');
         console.log(clickermostRanking);
+
+        rank = 1;
+        let clickermostRankTab = [];
+        for(var j = 1; j < clickermostRanking.length ; j++){
+            console.log(j);
+            if(clickermostRanking[j - 1].maxScore != clickermostRanking[j].maxScore){
+                rank = j;
+            }
+            clickermostRankTab.push({
+                _id: clickermostRanking[j]._id,
+                maxScore: clickermostRanking[j].maxScore,
+                rank: rank
+            });
+
+        }
+        console.log(clickermostRankTab);
+        
         res.render('home/ranking', {
-            clickCounterRanking: clickCounterRanking,
-            clickermostRanking: clickermostRanking
+            clickCounterRanking: clickCounterRankTab,
+            clickermostRanking: clickermostRankTab
         });
     }
+
+
 
 }
 
