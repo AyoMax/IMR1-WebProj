@@ -9,12 +9,18 @@ class GameLowDBService extends GameService {
     constructor() {
         super();
 
-        const adapter = new FileSync('db.json')
+        const adapter = new FileSync('lowdb.json')
         this.db = low(adapter);
     }
 
     createGame(name, description, slug) {
-        throw new Error('Method createGame not implemented.');
+        this.db.get('games')
+            .push({
+                name: name,
+                description: description, 
+                slug: slug
+            })
+            .write();
     }
 
     getGame(id) {
@@ -22,14 +28,9 @@ class GameLowDBService extends GameService {
     }
 
     async getGames() {
-        // let res = null;
-
-        // res = this.db.get('games');
-        // console.log(res);
-
-        // return res;
-
-        // throw new Error('Method getGames not implemented.');
+        let res = null;
+        res = this.db.get('games').value();
+        return res;
     }
 
     updateGame(id, name, description, slug) {

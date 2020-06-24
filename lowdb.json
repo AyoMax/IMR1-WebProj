@@ -1,0 +1,50 @@
+{
+  "games": [
+    {
+      "name": "Click Counter",
+      "description": "Dans ce jeu d'une excellence absolue en terme de gameplay vous devrez cliquer le plus de fois possible en 15s !",
+      "slug": "click-counter"
+    },
+    {
+      "name": "ClickerMost",
+      "description": "Dans ce jeu classique mais sans plus, la victoire sera au plus patient ! Celui qui cliquera le plus de fois sur un bouton ! (SANS LIMITE DE TEMPS !!!)",
+      "slug": "clickermost"
+    }
+  ],
+  "plays": [
+    {
+      "username": "truc",
+      "slug": "click-counter",
+      "score": 91,
+      "date": "2020-06-24T13:24:56.466Z"
+    },
+    {
+      "username": "truc",
+      "slug": "click-counter",
+      "score": 85,
+      "date": "2020-06-24T14:07:22.716Z"
+    }
+  ],
+  "users": [
+    {
+      "username": "ayolyan",
+      "password": "123"
+    },
+    {
+      "username": "test",
+      "password": "test"
+    },
+    {
+      "username": "bidule",
+      "password": "truc"
+    },
+    {
+      "username": "ElementaryStorm",
+      "password": "a"
+    },
+    {
+      "username": "truc",
+      "password": "a"
+    }
+  ]
+}
