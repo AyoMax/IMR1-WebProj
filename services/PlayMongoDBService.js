@@ -5,7 +5,7 @@ const PlayService = require('./PlayService');
 
 class PlayMongoDBService extends PlayService {
     
-    createPlay(username, slug, score, date) {
+    async createPlay(username, slug, score) {
         const play = new Play({
             username: username, 
             slug: slug, 
@@ -13,9 +13,19 @@ class PlayMongoDBService extends PlayService {
             date: new Date()
         });
         
-        play.save()
-            .then(() => console.log('Partie enregistré'))
-            .catch(error => console.log('Erreur lors de l\'enregistrement de la partie'));
+        let status;
+
+        await play.save()
+            .then(() => {
+                status = 201
+                console.log('Partie enregistré')
+            })
+            .catch(error => {
+                status = 500
+                console.log('Erreur lors de l\'enregistrement de la partie')
+            });
+    
+        return status
     }
 
     async getPlay(id) {
@@ -41,7 +51,6 @@ class PlayMongoDBService extends PlayService {
     async getGameRanking(slug){
         let res = null;
 
-
         res = await Play.aggregate(
             [
                 { $match: 
@@ -63,6 +72,7 @@ class PlayMongoDBService extends PlayService {
 
         return res;
     }
+    
     async getUserBestScore(slug, username){
         let res = null;
 

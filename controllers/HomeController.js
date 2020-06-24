@@ -23,7 +23,7 @@ class HomeController {
         const gameService = GameService.getInstance();
         
         gameService.getGames().then(result => {
-            res.render('home/games', { games: result });
+            res.render('home/games', { games: result, bestScore: bestScore, rank: rank });
         });        
     }
 

@@ -41,7 +41,6 @@ app.use('/auth', AuthRouter);
 app.get('*', (req, res, next) => {
     const cookies = req.cookies;
     const originalURL = req.originalUrl;
-    console.log(cookies);
 
     if (cookies.username) {
         if (cookies.isconnect == 'true') {

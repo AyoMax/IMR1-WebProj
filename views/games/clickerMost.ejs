@@ -5,7 +5,6 @@
         <%- include("../partials/head.ejs") %>
     </head>
     <body class="game">
-        <%- include("./partials/preloader.ejs") %>
         <%- include("../partials/header.ejs") %>
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -67,7 +66,6 @@
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                'username': "identifiantEnCartonBiszed",
                                 'slug': 'clickermost',
                                 'score': score
                             })
