@@ -1,19 +1,8 @@
 "use strict"
 
-class PlayService {
+const PlayService = require("./PlayService");
 
-    static getInstance() {
-        switch (process.env.DBPROVIDER) {
-            case 'MongoDB':
-                const PlayMongoDBService = require('./PlayMongoDBService');
-                return new PlayMongoDBService();
-                break;
-            case 'LowDB':
-                const PlayLowDBService = require("./PlayLowDBService");
-                return new PlayLowDBService();
-                break;
-        }
-    }
+class PlayLowDBService extends PlayService {
 
     async createPlay(username, slug, score) {
         throw new Error('Method createPlay not implemented.');
@@ -45,4 +34,4 @@ class PlayService {
 
 }
 
-module.exports = PlayService;
+module.exports = PlayLowDBService;
