@@ -47,16 +47,11 @@ class AuthController {
     }
 
     postRegister(req, res) {
-        console.log(req.body);
-
         if (req.body) {
             const userService = UserService.getInstance();
-            try {
-                userService.createUser(req.body.username, req.body.password);
-                res.sendStatus(201);
-            } catch (error) {
-                res.sendStatus(500);
-            }  
+            userService.createUser(req.body.username, req.body.password).then(status => {
+                res.sendStatus(status);
+            });
         } else {
             res.sendStatus(500);
         }
@@ -67,9 +62,8 @@ class AuthController {
     }
 
     postLogin(req, res) {
-        const userService = UserService.getInstance();
-
         if (req.body) {
+            const userService = UserService.getInstance();
             userService.getUserByUsername(req.body.username).then(result => {
                 if (result && result.username == req.body.username && result.password == req.body.password) {
                     res.sendStatus(201);

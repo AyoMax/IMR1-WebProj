@@ -20,13 +20,13 @@
                                 <input id="passwordconfirm" name="passwordconfirm" type="password" placeholder="Confirm password" required/>
                             </div>
                             <div class="col-12 d-flex justify-content-center">
-                                <input type="submit" value="Inscription" class="site-btn btn-sm"> 
+                                <input id="submit" type="submit" value="Inscription" class="site-btn btn-sm"> 
                             </div>
                         </div>
                     </form>
-                    <div>
+                    <!-- <div>
                         <button id="gitHubRegisterBtn" class="site-btn btn-sm">Connexion with github</button>
-                    </div>
+                    </div> -->
                     <div class="text-center">
                         <p>Déjà inscrit ? <a href="/auth/login">Se connecter</a></p>
                     </div>
@@ -37,8 +37,8 @@
             const form = document.getElementById('registerForm');
             form.addEventListener('submit', register);
 
-            let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
-            gitHubRegisterBtn.addEventListener('click', registerWithGitHub);
+            // let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
+            // gitHubRegisterBtn.addEventListener('click', registerWithGitHub);
 
             function register(evt) {
                 evt.preventDefault();
@@ -60,13 +60,28 @@
                                 'password': newPwd.value
                             })
                         }).then(response => {
+                            console.log(response.status);
                             switch (response.status) {
                                 case 201:
-                                    console.log('redirect');
-                                    // window.location.href = '/';
+                                    console.log('Redirect to homepage');
+                                    // Enregistrement des cookies
+                                    var d = new Date();
+                                    d.setTime(d.getTime() + (30*24*60*60*1000));
+                                    var expires = "expires="+ d.toUTCString();
+                                    document.cookie = "username" + "=" + username.value + ";" + expires + ";path=/";
+                                    document.cookie = "isconnect=true; path=/";
+                                    // Redirection vers la page d'accueil
+                                    window.location.href = '/';
                                     break;
-                                case 500:
-                                    username.setCustomValidity('Ce nom d\'utilisateur n\'est pas disponible');
+                                case 400:
+                                    console.log('Username déjà existant');
+                                    var tag = document.createElement("div");
+                                    tag.className = "error";
+                                    tag.classList = "col-12";
+                                    var text = document.createTextNode("Nom d'utilisateur ou mot de passe invalide");
+                                    tag.appendChild(text);
+                                    var element = document.getElementById("submit");
+                                    element.parentElement.before(tag);
                                     break;
                             }
                         }).catch(error => {

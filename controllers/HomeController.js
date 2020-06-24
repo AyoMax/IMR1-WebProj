@@ -5,6 +5,7 @@ const https = require('https');
 
 const Game = require('../models/GameSchema');
 const GameService = require('../services/GameService');
+const UserService = require("../services/UserService");
 
 const Play = require('../models/PlaySchema');
 const PlayService = require('../services/PlayMongoDBService');
@@ -12,7 +13,10 @@ const PlayService = require('../services/PlayMongoDBService');
 class HomeController {
 
     getIndex(req, res) {
-        res.render('index');
+        const userService = UserService.getInstance();
+        userService.getUserByUsername(req.cookies.username).then(result => {
+            res.render('index', { user: result });
+        });
     }
 
     getGames(req, res) {

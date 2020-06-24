@@ -5,33 +5,25 @@ const UserService = require('../services/UserService');
 
 class UserMongoDBService extends UserService {
 
-    createUser(username, password) {
+    async createUser(username, password) {
         const user = new User({
             username: username, 
             password: password
         });
 
-        user.save()
-            .then(() => console.log('Utilisateur enregistré'))
-            .catch(error => {
-                console.log('Erreur lors de l\'enregistrement de l\'utilisateur');
-                throw error;
-            });
-    }
+        let status = null;
 
-    createUser(username, password, gitHubToken) {
-        const user = new User({
-            username: username, 
-            password: password, 
-            gitHubToken: gitHubToken
-        });
-
-        user.save()
-            .then(() => console.log('Utilisateur enregistré'))
-            .catch(error => {
-                console.log('Erreur lors de l\'enregistrement de l\'utilisateur');
-                throw error;
-            });
+        await user.save()
+                    .then(() => {
+                        status = 201;
+                        console.log('Utilisateur enregistré')
+                    })
+                    .catch(error => {
+                        status = 400;
+                        console.log('Erreur lors de l\'enregistrement de l\'utilisateur');
+                    });
+        
+        return status;
     }
 
     async getUserByUsername(username) {

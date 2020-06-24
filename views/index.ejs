@@ -4,7 +4,23 @@
         <%- include("./partials/head.ejs") %>
     </head>
     <body>
+        <%- include("./partials/preloader.ejs") %>
         <%- include("./partials/header.ejs") %>
+        <!-- Hero section -->
+        <section class="hero-section">
+            <div class="hero-slider owl-carousel">
+                <div class="hs-item set-bg" data-setbg="img/slider-1.jpg">
+                    <div class="hs-text">
+                        <div class="container">
+                            <h2>Bienvenue <span><%= user.username %></span></h2>
+                            <p>Sur Game Warrior tu pourras jouer à de nombreux jeux à base de CLIQUE !!! <br> Pour commencer à jouer, n'hésite plus, fait ton premier CLIQUE sur le bouton ci-dessous !!!</p>
+                            <a href="/games" class="site-btn">Jouer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Hero section end -->
         <%- include("./partials/sharedJS.ejs") %>
     </body>
 </html>
