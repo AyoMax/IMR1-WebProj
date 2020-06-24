@@ -34,25 +34,39 @@ class HomeController {
             }
             let gameRanking = await playService.getGameRanking(game.slug);
             console.log(gameRanking);
-            let rank = false;
+
             // tri du tableau pour gérer les égalités
+            let rank = 1;
+            let tabRankUsername = [];
+            tabRankUsername.push({
+                _id: gameRanking[0]._id,
+                maxScore: gameRanking[0].maxScore,
+                rank: 1
+            });
             for(var i = 1; i < gameRanking.length ; i++){
                 console.log(i);
                 if(gameRanking[i - 1].maxScore != gameRanking[i].maxScore){
-                    if((gameRanking[i - 1]._id == req.cookies.username || gameRanking[i]._id == req.cookies.username) && !rank){
-                        rank = i;
-                    }
+                    rank = i+1;
+                }
+                tabRankUsername.push({
+                    _id: gameRanking[i]._id,
+                    rank: rank
+                });
+            }
+
+            // récupération du rang pour le joueur connecté
+            let finalRank = false;
+            for(var player of tabRankUsername){
+                if(player._id == req.cookies.username){
+                    finalRank = player.rank
                 }
             }
-            console.log("rang :"+rank)
-
-
             tabGameInfo.push({
                 name: game.name,
                 description: game.description,
                 slug: game.slug,
                 maxScore: bestScore,
-                rank:rank
+                rank:finalRank
             });
         }
         console.log(tabGameInfo);
@@ -69,10 +83,15 @@ class HomeController {
 
         let rank = 1;
         let clickCounterRankTab = [];
+        clickCounterRankTab.push({
+            _id: clickCounterRanking[0]._id,
+            maxScore: clickCounterRanking[0].maxScore,
+            rank: 1
+        });
         for(var i = 1; i < clickCounterRanking.length ; i++){
             console.log(i);
             if(clickCounterRanking[i - 1].maxScore != clickCounterRanking[i].maxScore){
-                rank = i;
+                rank = i+1;
             }
             clickCounterRankTab.push({
                 _id: clickCounterRanking[i]._id,
@@ -90,10 +109,15 @@ class HomeController {
 
         rank = 1;
         let clickermostRankTab = [];
+        clickermostRankTab.push({
+            _id: clickermostRanking[0]._id,
+            maxScore: clickermostRanking[0].maxScore,
+            rank: 1
+        });
         for(var j = 1; j < clickermostRanking.length ; j++){
             console.log(j);
             if(clickermostRanking[j - 1].maxScore != clickermostRanking[j].maxScore){
-                rank = j;
+                rank = j+1;
             }
             clickermostRankTab.push({
                 _id: clickermostRanking[j]._id,
