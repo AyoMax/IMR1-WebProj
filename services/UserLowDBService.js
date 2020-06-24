@@ -1,20 +1,54 @@
 "use strict"
 
 const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync')
 const UserService = require('../services/UserService');
 
 class UserLowDBService extends UserService {
 
-    async createUser(username, password) {
-        throw new Error('Method createUser not implemented.');
+    constructor() {
+        super();
+
+        const adapter = new FileSync('lowdb.json')
+        this.db = low(adapter);
     }
 
-    async getUserByUsername(name) {
-        throw new Error('Method getUserByName not implemented.');
+    async createUser(username, password) {
+        let status = null;
+
+        await this.getUserByUsername(username).then(res => {
+            if (res == null) {        
+                this.db.get('users')
+                    .push({
+                        username: username,
+                        password: password, 
+                    })
+                    .write();
+                status = 201;
+            } else {
+                status = 400;
+            }
+        });
+        
+        return status;
+    }
+
+    async getUserByUsername(username) {
+        let res;
+
+        res = this.db.get('users')
+            .filter({username: username})
+            .value()[0];
+
+        return res;
     }
 
     async getUsers() {
-        throw new Error('Method getUsers not implemented.');
+        let res;
+
+        res = this.db.get('users').value();
+
+        return res;
     }
 
     updateUser(id) {
