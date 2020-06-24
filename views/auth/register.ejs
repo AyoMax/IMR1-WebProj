@@ -39,11 +39,16 @@
             userErrtag.className = "col-12 error";
             var text = document.createTextNode("Nom d'utilisateur déjà existant");
             userErrtag.appendChild(text);
+            var element = document.getElementById("password");
+            element.parentElement.before(userErrtag);
+                                    
 
             var pwdErrtag = document.createElement("div");
             pwdErrtag.className = "col-12 error";
             var text = document.createTextNode("Vérification de mot de passe erronée.");
             pwdErrtag.appendChild(text);
+            var element = document.getElementById("submit");
+            element.parentElement.before(pwdErrtag);
 
             const form = document.getElementById('registerForm');
             form.addEventListener('submit', register);
@@ -61,7 +66,7 @@
                 let confirmPwd = document.getElementById('passwordconfirm');
 
                 if (newPwd.value == confirmPwd.value) {
-                    pwdErrtag.className = "";
+                    pwdErrtag.className = "col-12 error";
                     if (fetch) {
                         fetch('/auth/register', {
                             method: 'POST',
@@ -88,8 +93,7 @@
                                     break;
                                 case 400:
                                     console.log('Username déjà existant');
-                                    var element = document.getElementById("password");
-                                    element.parentElement.before(userErrtag);
+                                    
                                     userErrtag.className = "col-12 error show";
                                     break;
                             }
@@ -101,8 +105,7 @@
                     }
                 } else {
                     //confirmPwd.setCustomValidity('Le mot de passe doit correspondre');
-                    var element = document.getElementById("submit");
-                    element.parentElement.before(pwdErrtag);
+                    
                     pwdErrtag.className = "col-12 error show";
                 }
             }
