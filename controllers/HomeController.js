@@ -33,25 +33,25 @@ class HomeController {
                 bestScore = maxPlayerScore[0].maxScore;
             }
             let gameRanking = await playService.getGameRanking(game.slug);
-            console.log(gameRanking);
 
             // tri du tableau pour gérer les égalités
             let rank = 1;
             let tabRankUsername = [];
-            tabRankUsername.push({
-                _id: gameRanking[0]._id,
-                maxScore: gameRanking[0].maxScore,
-                rank: 1
-            });
-            for(var i = 1; i < gameRanking.length ; i++){
-                console.log(i);
-                if(gameRanking[i - 1].maxScore != gameRanking[i].maxScore){
-                    rank = i+1;
-                }
+            if (gameRanking[0]) {
                 tabRankUsername.push({
-                    _id: gameRanking[i]._id,
-                    rank: rank
+                    _id: gameRanking[0]._id,
+                    maxScore: gameRanking[0].maxScore,
+                    rank: 1
                 });
+                for(var i = 1; i < gameRanking.length ; i++){
+                    if(gameRanking[i - 1].maxScore != gameRanking[i].maxScore){
+                        rank = i+1;
+                    }
+                    tabRankUsername.push({
+                        _id: gameRanking[i]._id,
+                        rank: rank
+                    });
+                }
             }
 
             // récupération du rang pour le joueur connecté
@@ -69,17 +69,13 @@ class HomeController {
                 rank:finalRank
             });
         }
-        console.log(tabGameInfo);
         res.render('home/games', { games: tabGameInfo });
     }
 
     async getRanking(req, res) {
         const playService = PlayService.getInstance();
 
-        console.log('**** click-counter rety ****');
         let clickCounterRanking = await playService.getGameRanking('click-counter');
-        console.log(clickCounterRanking);
-        console.log(clickCounterRanking.length);
 
         let rank = 1;
         let clickCounterRankTab = [];
@@ -89,7 +85,6 @@ class HomeController {
             rank: 1
         });
         for(var i = 1; i < clickCounterRanking.length ; i++){
-            console.log(i);
             if(clickCounterRanking[i - 1].maxScore != clickCounterRanking[i].maxScore){
                 rank = i+1;
             }
@@ -99,13 +94,8 @@ class HomeController {
                 rank: rank
             });
         }
-        console.log(clickCounterRankTab);
 
-
-
-        console.log('**** clickermost ****');
         let clickermostRanking = await playService.getGameRanking('clickermost');
-        console.log(clickermostRanking);
 
         rank = 1;
         let clickermostRankTab = [];
@@ -115,7 +105,6 @@ class HomeController {
             rank: 1
         });
         for(var j = 1; j < clickermostRanking.length ; j++){
-            console.log(j);
             if(clickermostRanking[j - 1].maxScore != clickermostRanking[j].maxScore){
                 rank = j+1;
             }
@@ -126,7 +115,6 @@ class HomeController {
             });
 
         }
-        console.log(clickermostRankTab);
         
         res.render('home/ranking', {
             clickCounterRanking: clickCounterRankTab,

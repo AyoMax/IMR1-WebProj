@@ -38,49 +38,49 @@ class PlayLowDBService extends PlayService {
     }
 
     async getGameRanking(slug) {
-        throw new Error('Method getGameRanking not implemented.');
+        let res = [];
 
-        // let res = [];
+        const userService = new UserLowDBService();
+        await userService.getUsers().then(users => {
+            for (let user of users) {
+                this.getUserBestScore(slug, user.username).then(score => {
+                    if (score.length == 1) {
+                        res.push(score[0]);
+                    }
+                })
+            }
+        })
 
-        // const userService = new UserLowDBService();
-        // await userService.getUsers().then(users => {
-        //     for (let user of users) {
-        //         this.getUserBestScore(slug, user.username).then(score => {
-        //             console.log(score);
-        //             if (score > -1) {
-        //                 res.push({_id: user.username, maxScore: score})
-        //             }
-        //         })
-        //     }
-        // })
+        res.sort((a, b) => a.maxScore < b.maxScore);
 
-        // res.sort((a, b) => a.score > b.score);
-
-        // if (res.length > 10) {
-        //     return res.splice(0, 10);
-        // } else {
-        //     return res;
-        // }
+        if (res.length > 10) {
+            return res.splice(0, 10);
+        } else {
+            return res;
+        }
     }
 
     async getUserBestScore(slug, username) {
-        throw new Error('Method getUserBestScore not implemented.');
+        let res = null;
 
-        // let res = null;
-
-        // res = this.db.get('plays').value();
+        res = this.db.get('plays').value();
         
-        // res.filter(play => (play.slug == slug && play.username == username));
+        res = res.filter(play => {
+            return play.slug == slug && play.username == username
+        });
 
-        // if (res.length > 0) {
-        //     res.reduce(function(a,b) {
-        //         return Math.max(a.score, b.score);
-        //     });
+        if (res.length > 0) {
+            res.reduce(function(a,b) {
+                return a.score > b.score;
+            });
 
-        //     return res[0].score;
-        // } else {
-        //     return -1;
-        // }
+            res = [{
+                _id: res[0].username, 
+                maxScore: res[0].score
+            }];
+        }
+        
+        return res;
     }
 
     updatePlay(id, userId, gameId, score, date) {

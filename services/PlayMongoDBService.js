@@ -91,7 +91,7 @@ class PlayMongoDBService extends PlayService {
                     }
                 }
             ])
-
+        console.log(res);
         return res;
     }
 
