@@ -17,10 +17,10 @@ class GameMongoDBService extends GameService {
             .catch(error => console.log('Erreur lors de l\'enregistrement du jeu'));
     }
 
-    getGame(id) {
+    async getGame(id) {
         let res = null;
 
-        Game.findOne({ _id: id})
+        await Game.findOne({ _id: id})
                     .then(game => { res = game })
                     .catch(error => console.log( error ));
 
