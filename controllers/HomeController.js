@@ -19,12 +19,39 @@ class HomeController {
         });
     }
 
-    getGames(req, res) {
-        const gameService = GameService.getInstance();
+    async getGames(req, res) {
         
-        gameService.getGames().then(result => {
-            res.render('home/games', { games: result, bestScore: bestScore, rank: rank });
-        });        
+        const gameService = GameService.getInstance();
+        const playService = PlayService.getInstance();
+        let result = await gameService.getGames();
+        
+        let tabGameInfo = [];
+        for (let game of result) {
+            let maxPlayerScore = await playService.getUserBestScore(game.slug, req.cookies.username);
+            let bestScore = 0;
+            if(maxPlayerScore.length > 0){
+                bestScore = maxPlayerScore[0].maxScore;
+            }
+            let rank = null;
+            let gameRanking = await playService.getGameRanking(game.slug);
+            let index = 0;
+            console.log(gameRanking);
+            for (let play of gameRanking){
+                index++;
+                if(req.cookies.username == play._id){
+                    rank = index;
+                }
+            }
+            tabGameInfo.push({
+                name: game.name,
+                description: game.description,
+                slug: game.slug,
+                maxScore: bestScore,
+                rank:rank
+            });
+        }
+        console.log(tabGameInfo);
+        res.render('home/games', { games: tabGameInfo });
     }
 
     async getRanking(req, res) {
