@@ -5,6 +5,47 @@
     </head>
     <body>
         <%- include("../partials/header.ejs") %>
+        <section class="container ranking">
+            <h1>Classements</h1>
+            <h2>Top 10 : Click counter</h2>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (player of clickCounterRanking) { %>
+                    <tr>
+                        <th scope="row"><%= player.rank %></th>
+                        <td><%= player._id %></td>
+                        <td><%= player.maxScore %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+              </table>
+              <h2>Top 10 : Clickermost</h2>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (player of clickermostRanking) { %>
+                    <tr>
+                        <th scope="row"><%= player.rank %></th>
+                        <td><%= player._id %></td>
+                        <td><%= player.maxScore %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+              </table>
+        </section>
         <%- include("../partials/sharedJS.ejs") %>
     </body>
 </html>

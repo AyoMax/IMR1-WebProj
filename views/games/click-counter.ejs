@@ -4,7 +4,7 @@
     <head>
         <%- include("../partials/head.ejs") %>
     </head>
-    <body class="click-counter">
+    <body class="game">
         <%- include("../partials/header.ejs") %>
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -25,6 +25,7 @@
                 </div>
                 <div class="popup popup-end">
                     <p>Votre Score est de : <span></span> clique.s en 15 secondes !</p>
+                    <p>Votre meilleur score est de : <span id="maxScore"><%= maxScore %></span></p>
                     <div class="btn-container text-center">
                         <a href="/ranking">Voir classement</a>
                     </div>
@@ -35,6 +36,7 @@
     <%- include("../partials/sharedJS.ejs") %>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            let maxScore = document.getElementById("maxScore");
             document.querySelector('.cookie img').ondragstart = function() { return false; };
             let cookieTag = document.querySelector(".cookie");
             let timerMinTag = document.querySelector(".timer .min");
@@ -56,8 +58,11 @@
                 intervalId = setInterval(() => {
                     if(counter == 0){
                         clearInterval(intervalId);
-                        document.querySelector(".popup-end").className = "popup popup-end show";
                         finalScoreTag.innerHTML = score;
+                        if(score > maxScore.innerHTML){
+                            maxScore.innerHTML = score;
+                        }
+                        document.querySelector(".popup-end").className = "popup popup-end show";
                         if (fetch) {
                             fetch('/game/register', {
                                 method: 'POST',
@@ -65,10 +70,8 @@
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    'username': "identifiantEnCarton",
                                     'slug': 'click-counter',
-                                    'score': score,
-                                    'date': new Date()
+                                    'score': score
                                 })
                             }).then(response => {
                                 switch (response.status) {

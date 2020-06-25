@@ -22,6 +22,7 @@
                 </div>
                 <div class="popup popup-end">
                     <p>Votre Score est de : <span></span></p>
+                    <p>Votre meilleur score est de : <span id="maxScore"><%= maxScore %></span></p>
                     <div class="btn-container text-center">
                         <a href="/ranking">Voir classement</a>
                     </div>
@@ -33,6 +34,8 @@
     <%- include("../partials/sharedJS.ejs") %>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            let maxScore = document.getElementById("maxScore");
+
             document.querySelector('.cookie img').ondragstart = function() { return false; };
             let cookieTag = document.querySelector(".cookie");
             let scoreTag = document.querySelector(".nbClick span");
@@ -50,8 +53,12 @@
             endButton.addEventListener("click", () => {
                 endButton.className = "endbutton";
                 if(start = true){
-                    document.querySelector(".popup-end").className = "popup popup-end show";
                     finalScoreTag.innerHTML = score;
+                    if(score > maxScore.innerHTML){
+                        maxScore.innerHTML = score;
+                    }
+                    document.querySelector(".popup-end").className = "popup popup-end show";
+                    
                     if (fetch) {
                         fetch('/game/register', {
                             method: 'POST',
@@ -59,10 +66,8 @@
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                'username': "identifiantEnCarton",
                                 'slug': 'clickermost',
-                                'score': score,
-                                'date': new Date()
+                                'score': score
                             })
                         }).then(response => {
                             switch (response.status) {

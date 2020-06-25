@@ -5,17 +5,27 @@ const PlayService = require('./PlayService');
 
 class PlayMongoDBService extends PlayService {
     
-    createPlay(username, slug, score, date) {
+    async createPlay(username, slug, score) {
         const play = new Play({
             username: username, 
             slug: slug, 
             score: score,
-            date: date
+            date: new Date()
         });
         
-        play.save()
-            .then(() => console.log('Partie enregistré'))
-            .catch(error => console.log('Erreur lors de l\'enregistrement de la partie'));
+        let status;
+
+        await play.save()
+            .then(() => {
+                status = 201
+                console.log('Partie enregistré')
+            })
+            .catch(error => {
+                status = 500
+                console.log('Erreur lors de l\'enregistrement de la partie')
+            });
+    
+        return status
     }
 
     async getPlay(id) {
@@ -35,6 +45,53 @@ class PlayMongoDBService extends PlayService {
             res.push(play);
         }
         
+        return res;
+    }
+
+    async getGameRanking(slug) {
+        let res = null;
+
+        res = await Play.aggregate(
+            [
+                { $match: 
+                    { slug: slug } 
+                },
+                { $group: 
+                    { 
+                        _id: "$username",
+                        maxScore: { $max: "$score" }
+                    }
+                },
+                { $sort: 
+                    { "maxScore": -1 }
+                },
+                {
+                    $limit: 10
+                }
+            ])
+
+        return res;
+    }
+
+    async getUserBestScore(slug, username) {
+        let res = null;
+
+        res = await Play.aggregate(
+            [
+                { $match: 
+                    { slug: slug }
+                },
+                { $match: 
+                    { username: username }
+                },
+                { $group: 
+                    { 
+                        _id: "$username",
+                        maxScore: { $max: "$score" }
+                    }
+                }
+            ])
+        console.log(res);
         return res;
     }
 

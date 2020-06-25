@@ -6,7 +6,7 @@ const playSchema = mongoose.Schema({
     username: { type: String, required: true },
     slug: { type: String, required: true },
     score: { type: Number },
-    date: { date : Date }
+    date: { type : Date }
 });
 
 module.exports = mongoose.model('Play', playSchema);

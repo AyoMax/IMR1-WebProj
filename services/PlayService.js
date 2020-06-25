@@ -8,19 +8,31 @@ class PlayService {
                 const PlayMongoDBService = require('./PlayMongoDBService');
                 return new PlayMongoDBService();
                 break;
+            case 'LowDB':
+                const PlayLowDBService = require("./PlayLowDBService");
+                return new PlayLowDBService();
+                break;
         }
     }
 
-    createPlay(userId, gameId, score, date) {
+    async createPlay(username, slug, score) {
         throw new Error('Method createPlay not implemented.');
     }
 
-    getPlay(id) {
+    async getPlay(id) {
         throw new Error('Method getPlay not implemented.');
     }
 
     async getPlays() {
         throw new Error('Method getPlays not implemented.');
+    }
+
+    async getGameRanking(slug) {
+        throw new Error('Method getGameRanking not implemented.');
+    }
+
+    async getUserBestScore(slug, username) {
+        throw new Error('Method getUserBestScore not implemented.');
     }
 
     updatePlay(id, userId, gameId, score, date) {

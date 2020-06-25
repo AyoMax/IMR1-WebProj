@@ -17,7 +17,7 @@
                                 <input id="password" name="password" type="password" placeholder="Password"/>
                             </div>
                             <div class="col-12 d-flex justify-content-center">
-                                <input type="submit" value="Connexion" class="site-btn btn-sm"> 
+                                <input id="submit" type="submit" value="Connexion" class="site-btn btn-sm"> 
                             </div>
                         </div>
                     </form>
@@ -28,12 +28,20 @@
             </div>
         </div>
         <script>
+            var tag = document.createElement("div");
+            tag.className = "col-12 error";
+            var text = document.createTextNode("Nom d'utilisateur ou mot de passe invalide");
+            tag.appendChild(text);
+            var element = document.getElementById("submit");
+            element.parentElement.before(tag);
+
+
             const form = document.getElementById('loginForm');
-            form.addEventListener('submit', login);
+            form.addEventListener('submit', login, false);
 
             function login(evt) {
                 evt.preventDefault();
-
+                tag.className = "col-12 error";
                 let username = document.getElementById('username');
                 let pwd = document.getElementById('password');
 
@@ -50,10 +58,20 @@
                     }).then(response => {
                         switch (response.status) {
                             case 201:
-                                console.log('redirect');
-                                // window.location.href = '/';
+                                console.log('Redirect to homepage');
+                                // Enregistrement des cookies
+                                var d = new Date();
+                                d.setTime(d.getTime() + (30*24*60*60*1000));
+                                var expires = "expires="+ d.toUTCString();
+                                document.cookie = "username" + "=" + username.value + ";" + expires + ";path=/";
+                                document.cookie = "isconnect=true; path=/";
+                                // Redirection vers la page d'accueil
+                                window.location.href = '/';
                                 break;
-                            }
+                            case 400:
+                                console.log('Mauvais mot de passe');
+                                tag.className = "col-12 error show";
+                        }
                     }).catch(error => {
                         console.error('Failed request', error);
                     })

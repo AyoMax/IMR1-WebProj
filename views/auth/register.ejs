@@ -20,13 +20,13 @@
                                 <input id="passwordconfirm" name="passwordconfirm" type="password" placeholder="Confirm password" required/>
                             </div>
                             <div class="col-12 d-flex justify-content-center">
-                                <input type="submit" value="Inscription" class="site-btn btn-sm"> 
+                                <input id="submit" type="submit" value="Inscription" class="site-btn btn-sm"> 
                             </div>
                         </div>
                     </form>
-                    <div>
+                    <!-- <div>
                         <button id="gitHubRegisterBtn" class="site-btn btn-sm">Connexion with github</button>
-                    </div>
+                    </div> -->
                     <div class="text-center">
                         <p>Déjà inscrit ? <a href="/auth/login">Se connecter</a></p>
                     </div>
@@ -34,21 +34,39 @@
             </div>
         </div>
         <script>
+
+            var userErrtag = document.createElement("div");
+            userErrtag.className = "col-12 error";
+            var text = document.createTextNode("Nom d'utilisateur déjà existant");
+            userErrtag.appendChild(text);
+            var element = document.getElementById("password");
+            element.parentElement.before(userErrtag);
+                                    
+
+            var pwdErrtag = document.createElement("div");
+            pwdErrtag.className = "col-12 error";
+            var text = document.createTextNode("Vérification de mot de passe erronée.");
+            pwdErrtag.appendChild(text);
+            var element = document.getElementById("submit");
+            element.parentElement.before(pwdErrtag);
+
             const form = document.getElementById('registerForm');
             form.addEventListener('submit', register);
 
-            let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
-            gitHubRegisterBtn.addEventListener('click', registerWithGitHub);
+            // let gitHubRegisterBtn = document.getElementById('gitHubRegisterBtn');
+            // gitHubRegisterBtn.addEventListener('click', registerWithGitHub);
 
             function register(evt) {
                 evt.preventDefault();
+                userErrtag.className = "col-12 error";
+                pwdErrtag.className = "col-12 error";
 
                 let username = document.getElementById('username');
                 let newPwd = document.getElementById('password');
                 let confirmPwd = document.getElementById('passwordconfirm');
 
                 if (newPwd.value == confirmPwd.value) {
-                    confirmPwd.setCustomValidity('');
+                    pwdErrtag.className = "col-12 error";
                     if (fetch) {
                         fetch('/auth/register', {
                             method: 'POST',
@@ -60,13 +78,23 @@
                                 'password': newPwd.value
                             })
                         }).then(response => {
+                            console.log(response.status);
                             switch (response.status) {
                                 case 201:
-                                    console.log('redirect');
-                                    // window.location.href = '/';
+                                    console.log('Redirect to homepage');
+                                    // Enregistrement des cookies
+                                    var d = new Date();
+                                    d.setTime(d.getTime() + (30*24*60*60*1000));
+                                    var expires = "expires="+ d.toUTCString();
+                                    document.cookie = "username" + "=" + username.value + ";" + expires + ";path=/";
+                                    document.cookie = "isconnect=true; path=/";
+                                    // Redirection vers la page d'accueil
+                                    window.location.href = '/';
                                     break;
-                                case 500:
-                                    username.setCustomValidity('Ce nom d\'utilisateur n\'est pas disponible');
+                                case 400:
+                                    console.log('Username déjà existant');
+                                    
+                                    userErrtag.className = "col-12 error show";
                                     break;
                             }
                         }).catch(error => {
@@ -76,7 +104,9 @@
                         // Faire quelque chose avec XMLHttpRequest?
                     }
                 } else {
-                    confirmPwd.setCustomValidity('Le mot de passe doit correspondre');
+                    //confirmPwd.setCustomValidity('Le mot de passe doit correspondre');
+                    
+                    pwdErrtag.className = "col-12 error show";
                 }
             }
 

@@ -8,8 +8,12 @@ class GameService {
                 // On recquiert GameMongoDBService à l'intérieur de la fonction,
                 // car si on l'avait déclarer en début de fichier il aurait été déclaré 
                 // avant la définition de GameService, dont il hérite
-                const GameMongoDBService = require('../services/GameMongoDBService');
+                const GameMongoDBService = require('./GameMongoDBService');
                 return new GameMongoDBService();
+                break;
+            case 'LowDB':
+                const GameLowDBService = require("./GameLowDBService");
+                return new GameLowDBService();
                 break;
         }
     }
